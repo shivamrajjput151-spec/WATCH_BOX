@@ -65,4 +65,23 @@ router.get("/me", auth, async (req, res) => {
   }
 });
 
-module.exports = router;
+// PATCH /api/auth/theme   ← yahan pe hona chahiye (module.exports se pehle)
+router.patch("/theme", auth, async (req, res) => {
+  try {
+    const { theme } = req.body;
+    if (!["light", "dark"].includes(theme)) {
+      return res.status(400).json({ message: "Theme must be light or dark" });
+    }
+    const user = await User.findByIdAndUpdate(
+      req.userId,
+      { theme },
+      { new: true }
+    ).select("-passwordHash");
+    if (!user) return res.status(404).json({ message: "User not found" });
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+module.exports = router;   // ← ab last mein
