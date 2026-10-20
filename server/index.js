@@ -10,6 +10,7 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 app.use("/api/auth", require("./routes/auth"));
+app.use("/api/movies", require("./routes/movies"));
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'WatchBox API running' });
